@@ -4,7 +4,47 @@ void swap(int* a, int* b)
 {
     int temp = *a;
     *a = *b;
-    *b = temp; 
+    *b = temp;
+}
+
+int* selection_sort(int* array, int arraySize) {
+    // if array size is larger than one, then start checking
+    int currentItemIndex = 0;
+    while (currentItemIndex < arraySize) {
+        int minItemIndex = currentItemIndex;
+        for (int i = currentItemIndex; i < arraySize; i++) {
+            if (array[i] < array[minItemIndex])
+                swap(&array[i], &array[minItemIndex]);
+        }
+        currentItemIndex++;
+    }
+    return array;
+}
+
+int* insertion_sort(int* array, int arraySize) {
+    // if array size is larger than one, then start checking
+    int currentItemIndex = 0;
+    while (currentItemIndex < arraySize) {
+        for (int i=0; i < currentItemIndex; i++) {
+            if (array[i] > array[currentItemIndex]) {
+                swap(&array[i], &array[currentItemIndex]);
+            }
+        }
+        currentItemIndex++;
+    }
+    return array;
+}
+
+int* bubble_sort(int* array, int arraySize) {
+    while (arraySize > 1) {
+        for (int i=0; i < arraySize-1; i++) {
+            if (array[i] > array[i+1])
+                swap(&array[i], &array[i+1]);
+        }
+        arraySize--;
+    }
+
+    return array;
 }
 
 int* merge_sort(int* array, int arraySize) {
