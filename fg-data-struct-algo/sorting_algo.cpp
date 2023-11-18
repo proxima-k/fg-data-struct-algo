@@ -1,7 +1,13 @@
 #include "sorting_algo.h"
 
-int* merge_sort(int* array, int arraySize)
+void swap(int* a, int* b)
 {
+    int temp = *a;
+    *a = *b;
+    *b = temp; 
+}
+
+int* merge_sort(int* array, int arraySize) {
     
     if (arraySize == 1)
     {
@@ -13,7 +19,6 @@ int* merge_sort(int* array, int arraySize)
     int* leftArray = merge_sort(array, leftSize);
     int* rightArray = merge_sort(array + leftSize, rightSize);
     int* combinedArray = new int[arraySize];
-    
     
     // merge left and right
     int leftIndex = 0;
@@ -60,4 +65,4 @@ int* merge_sort(int* array, int arraySize)
     combinedArray = nullptr;
     
     return array;
-}   
+}
