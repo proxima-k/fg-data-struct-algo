@@ -156,6 +156,12 @@
   <ItemGroup>
     <ClCompile Include="fg_data_struct_algo.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sorting_algo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sorting_algo.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
