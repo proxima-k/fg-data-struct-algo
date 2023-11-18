@@ -106,3 +106,34 @@ int* merge_sort(int* array, int arraySize) {
     
     return array;
 }
+
+int* quick_sort(int* array, int arraySize)
+{
+    if (arraySize <= 1)
+    {
+        return array;
+    }
+    
+    int pivotIndex = 0;
+    int lastIndex = arraySize - 1;
+
+    for (int i=0; i<lastIndex; i++)
+    {
+        if (array[i] < array[lastIndex])
+        {
+            swap(&array[i], &array[pivotIndex]);
+            pivotIndex++;
+        }
+    }
+    swap(&array[pivotIndex], &array[lastIndex]);
+
+    // std::cout << pivotIndex << std::endl;
+    // Utils::print_message(std::to_string(arraySize).c_str());
+    // Utils::print_message("Partitioned: ", false);
+    // Utils::print_array(array, arraySize);
+    //
+    quick_sort(array, pivotIndex);
+    quick_sort(array+pivotIndex+1, lastIndex-pivotIndex);
+    
+    return array;
+}
