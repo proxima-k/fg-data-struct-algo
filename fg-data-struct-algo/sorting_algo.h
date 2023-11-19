@@ -1,7 +1,9 @@
 #ifndef SORTING_ALGO_H
 #define SORTING_ALGO_H
 
-void swap(int* a, int* b);
+template <typename T>
+
+void swap(T* a, T* b);
 
 typedef int* (*sort_func)(int* array, int arraySize);
 sort_func get_sort_func();
@@ -17,5 +19,10 @@ int* bubble_sort(int* array, int arraySize);
 int* merge_sort(int* array, int arraySize);
 
 int* quick_sort(int* array, int arraySize);
+
+// performance measuring
+long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iterationCount);
+long long quick_sort(long long* array, int arraySize);
+
 
 #endif // SORTING_ALGO_H

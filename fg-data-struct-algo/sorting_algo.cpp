@@ -1,26 +1,36 @@
 #include "sorting_algo.h"
+#include <chrono>
 #include "utils.h"
 #include <iostream>
 using namespace Utils;
 
-void swap(int* a, int* b)
+template <typename T>
+void swap(T* a, T* b)
 {
-    int temp = *a;
+    T temp = *a;
     *a = *b;
     *b = temp;
 }
 
+
 sort_func get_sort_func()
 {
-    Logger::print_message("Select sort function:\n"
-                          "1. Selection sort\n"
-                          "2. Insertion sort\n"
-                          "3. Bubble sort\n"
-                          "4. Merge sort\n"
-                          "5. Quick sort\n"
-                          ">>> ", false);
+
     int choice;
-    std::cin >> choice;
+
+    do
+    {
+        choice = IO::get_int_input("Select sorting algorithm:\n"
+                                   "1. Selection sort\n"
+                                   "2. Insertion sort\n"
+                                   "3. Bubble sort\n"
+                                   "4. Merge sort\n"
+                                   "5. Quick sort\n");
+
+        if (choice < 1 || choice > 5)
+            IO::print_message("Invalid choice. Please try again.");
+    } while (choice < 1 || choice > 5);
+    
     switch (choice)
     {
     case 1:
@@ -157,14 +167,57 @@ int* quick_sort(int* array, int arraySize)
         }
     }
     swap(&array[pivotIndex], &array[lastIndex]);
-
-    // std::cout << pivotIndex << std::endl;
-    // Utils::print_message(std::to_string(arraySize).c_str());
-    // Utils::print_message("Partitioned: ", false);
-    // Utils::print_array(array, arraySize);
-    //
+    
     quick_sort(array, pivotIndex);
     quick_sort(array+pivotIndex+1, lastIndex-pivotIndex);
     
     return array;
+}
+
+long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iterationCount)
+{
+    long long* resultArray = new long long[iterationCount];
+    
+    for (int i = 0; i < iterationCount; i++)
+    {
+        int* array = DataStructures::create_array_random_values(arraySize);
+        
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        sort(array, arraySize);
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        long long timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
+        
+        resultArray[i] = timeTakenNanoseconds;
+        
+        delete [] array;
+    }
+
+    return resultArray;
+}
+
+long long quick_sort(long long* array, int arraySize)
+{
+    if (arraySize <= 1)
+    {
+        return array[0];
+    }
+    
+    int pivotIndex = 0;
+    int lastIndex = arraySize - 1;
+
+    for (int i=0; i<lastIndex; i++)
+    {
+        if (array[i] < array[lastIndex])
+        {
+            swap(&array[i], &array[pivotIndex]);
+            pivotIndex++;
+        }
+    }
+    swap(&array[pivotIndex], &array[lastIndex]);
+    
+    quick_sort(array, pivotIndex);
+    quick_sort(array+pivotIndex+1, lastIndex-pivotIndex);
+    
+    return array[0];
 }
