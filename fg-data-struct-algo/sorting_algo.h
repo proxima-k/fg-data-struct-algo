@@ -3,6 +3,9 @@
 
 void swap(int* a, int* b);
 
+typedef int* (*sort_func)(int* array, int arraySize);
+sort_func get_sort_func();
+
 // simple
 int* selection_sort(int* array, int arraySize);
 

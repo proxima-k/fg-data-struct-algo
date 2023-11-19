@@ -155,12 +155,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="fg_data_struct_algo.cpp" />
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sorting_algo.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="sorting_algo.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

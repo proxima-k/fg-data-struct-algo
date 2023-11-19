@@ -1,10 +1,41 @@
 #include "sorting_algo.h"
+#include "utils.h"
+#include <iostream>
+using namespace Utils;
 
 void swap(int* a, int* b)
 {
     int temp = *a;
     *a = *b;
     *b = temp;
+}
+
+sort_func get_sort_func()
+{
+    Logger::print_message("Select sort function:\n"
+                          "1. Selection sort\n"
+                          "2. Insertion sort\n"
+                          "3. Bubble sort\n"
+                          "4. Merge sort\n"
+                          "5. Quick sort\n"
+                          ">>> ", false);
+    int choice;
+    std::cin >> choice;
+    switch (choice)
+    {
+    case 1:
+        return selection_sort;
+    case 2:
+        return insertion_sort;
+    case 3:
+        return bubble_sort;
+    case 4:
+        return merge_sort;
+    case 5:
+        return quick_sort;
+    default:
+        return nullptr;
+    }
 }
 
 int* selection_sort(int* array, int arraySize) {
