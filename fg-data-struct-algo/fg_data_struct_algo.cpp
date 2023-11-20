@@ -1,73 +1,121 @@
 #include <iostream>
 #include <string>
 #include <chrono>
+#include <fstream>
+#include <list>
 #include "sorting_algo.h"
 #include "utils.h"
 
 using namespace Utils;
 
-float get_average(long long* array, int arraySize);
-float get_median(long long* array, int arraySize, bool isSorted = false);
-float get_min(long long* array, int arraySize);
-float get_max(long long* array, int arraySize);
+struct SortResult
+{
+    std::string sortName;
+    int arraySize;
+    // long long* timeTakenArray;
+    double averageTimeTaken;
+    double medianTimeTaken;
+    long long min;
+    long long max;
+    
+    ~SortResult()
+    {
+        // delete [] timeTakenArray;
+        // timeTakenArray = nullptr;
+    }
+};
+
+double get_average(long long* array, int arraySize);
+double get_median(long long* array, int arraySize, bool isSorted = false);
+long long get_min(long long* array, int arraySize);
+long long get_max(long long* array, int arraySize);
+void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std::string fileName);
+
 
 int main()
 {
     std::string reply;
-    
+
+    std::list<SortResult> sortResultList = std::list<SortResult>();
+    int arraySizes[] = { 10, 50, 100, 500, 1000, 5000 };
     do
     {
-        // sort_func sort = get_sort_func();
+        std::string sortName;
+        sort_func sort = get_sort_func(sortName);
         
-        // int arraySize = IO::get_int_input("Enter array size:\n");
-        // int iterationCount = IO::get_int_input("Enter number of iterations:\n");
+        for (int i=0; i<6; i++)
+        {
+            int arraySize = arraySizes[i];
+            int iterationCount = 10;
+            
+            std::cout << "Sorting " << arraySize << " elements...\n";
+            long long* resultArray = get_sort_time_taken_array(sort, arraySize, iterationCount);
 
-        sort_func sort = quick_sort;
-        int arraySize = 100000;
-        int iterationCount = 10;
-        
-        long long* resultArray = new long long[iterationCount];
+            double averageTimeTaken = get_average(resultArray, iterationCount);
+            double medianTimeTaken = get_median(resultArray, iterationCount);
+            
+            SortResult sortResult;
+            sortResult.sortName = sortName;
+            sortResult.arraySize = arraySize;
+            sortResult.averageTimeTaken = averageTimeTaken;
+            sortResult.medianTimeTaken = medianTimeTaken;
+            sortResult.min = get_min(resultArray, iterationCount);
+            sortResult.max = get_max(resultArray, iterationCount);
 
-        resultArray = get_sort_time_taken_array(sort, arraySize, iterationCount);
-
-        float averageTimeTaken = get_average(resultArray, iterationCount);
-        float medianTimeTaken = get_median(resultArray, iterationCount);
-        
-        std::cout << std::fixed;
-        std::cout.precision(2);
-        std::cout << "Average time taken: " << averageTimeTaken << " nanoseconds" << std::endl;
-        std::cout << "Median time taken: " << medianTimeTaken << " nanoseconds" << std::endl;
-        std::cout << "Min: " << get_min(resultArray, iterationCount) << " nanoseconds" << std::endl;
-        std::cout << "Max: " << get_max(resultArray, iterationCount) << " nanoseconds" << std::endl;
-        
-        std::cout << "First: " << resultArray[0] << " nanoseconds" << std::endl;
-        
+            sortResultList.push_back(sortResult);
+            
+            delete [] resultArray;
+            resultArray = nullptr;
+        }
         sort = nullptr;
-        delete [] resultArray;
-        resultArray = nullptr;
-
 
         IO::print_new_line();
         std::cout << "Try again? (y/n)\n>>> ";
+        
         std::cin >> reply;
     } while (reply == "y");
     
+    generate_csv_file(sortResultList, sortResultList.size(), "SortResult");
     
     return 0;
 }
 
+void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std::string fileName)
+{
+    std::ofstream csvFile;
+    csvFile.open(fileName + ".csv");
 
-float get_average(long long* array, int arraySize)
+    if (!csvFile.is_open())
+    {
+        std::cout << "Error opening file.\n";
+        return;
+    }
+    
+    csvFile << "Sort Algorithm, Average, Median, Min, Max\n";
+    csvFile << std::fixed;
+    csvFile.precision(2);
+    for (const auto& sortResult : sortResultArray)
+    {
+        csvFile << sortResult.sortName << " (" << sortResult.arraySize << "), "
+                << sortResult.averageTimeTaken << ", "
+                << sortResult.medianTimeTaken << ", "
+                << sortResult.min << ", "
+                << sortResult.max << "\n";
+    }
+    csvFile.close();
+}
+
+double get_average(long long* array, int arraySize)
 {
     long long sum = 0;
     for (int i = 0; i < arraySize; i++)
     {
         sum += array[i];
     }
-    return (float)sum / arraySize;
+    return (double)sum / arraySize;
 }
 
-float get_median(long long* array, int arraySize, bool isSorted)
+double get_median(long long* array, int arraySize, bool isSorted)
 {
     if (!isSorted)
     {
@@ -76,14 +124,14 @@ float get_median(long long* array, int arraySize, bool isSorted)
     
     if (arraySize % 2 == 0)
     {
-        return (float)(array[arraySize / 2 - 1] + array[arraySize / 2]) / 2;
+        return (double)(array[arraySize / 2 - 1] + array[arraySize / 2]) / 2;
     }
 
-    return (float)array[arraySize / 2];
+    return (double)array[arraySize / 2];
     
 }
 
-float get_min(long long* array, int arraySize)
+long long get_min(long long* array, int arraySize)
 {
     long long min = array[0];
     for (int i = 1; i < arraySize; i++)
@@ -96,7 +144,7 @@ float get_min(long long* array, int arraySize)
     return min;
 }
 
-float get_max(long long* array, int arraySize)
+long long get_max(long long* array, int arraySize)
 {
     long long max = array[0];
     for (int i = 1; i < arraySize; i++)

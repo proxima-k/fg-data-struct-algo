@@ -12,8 +12,18 @@ void swap(T* a, T* b)
     *b = temp;
 }
 
+bool is_sorted(int* array, int arraySize)
+{
+    for (int i = 0; i < arraySize - 1; i++)
+    {
+        if (array[i] > array[i + 1])
+            return false;
+    }
+    return true;
+}
 
-sort_func get_sort_func()
+
+sort_func get_sort_func(std::string& sortName)
 {
 
     int choice;
@@ -34,14 +44,19 @@ sort_func get_sort_func()
     switch (choice)
     {
     case 1:
+        sortName = "Selection sort";
         return selection_sort;
     case 2:
+        sortName = "Insertion sort";
         return insertion_sort;
     case 3:
+        sortName = "Bubble sort";
         return bubble_sort;
     case 4:
+        sortName = "Merge sort";
         return merge_sort;
     case 5:
+        sortName = "Quick sort";
         return quick_sort;
     default:
         return nullptr;
@@ -183,16 +198,25 @@ long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iteratio
         int* array = DataStructures::create_array_random_values(arraySize);
         
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+ 
         sort(array, arraySize);
+
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        if (!is_sorted(array, arraySize))
+        {
+            std::cout << "ERROR: ARRAY NOT SORTED" << std::endl;
+        }
 
         long long timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count();
         
         resultArray[i] = timeTakenNanoseconds;
         
         delete [] array;
+        std::cout << "end of iteration " << i << std::endl;
     }
 
+    
     return resultArray;
 }
 

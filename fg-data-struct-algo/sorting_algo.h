@@ -1,12 +1,15 @@
 #ifndef SORTING_ALGO_H
 #define SORTING_ALGO_H
+#include <string>
 
 template <typename T>
-
 void swap(T* a, T* b);
 
+bool is_sorted(int* array, int arraySize);
+
 typedef int* (*sort_func)(int* array, int arraySize);
-sort_func get_sort_func();
+sort_func get_sort_func(std::string& sortName);
+
 
 // simple
 int* selection_sort(int* array, int arraySize);
