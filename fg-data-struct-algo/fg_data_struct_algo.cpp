@@ -40,20 +40,45 @@ int main()
     std::string reply;
 
     std::list<SortResult> sortResultList = std::list<SortResult>();
-    const int arraySizes[] = { 10, 50, 100, 500, 1000, 5000 };
-  
-    do
+    const int dataSizes[] = { 10, 50, 100, 500, 1000, 5000 };
+
+    // i need a list of sort_func
+    sort_func sortFuncs[] = { selection_sort, insertion_sort, bubble_sort, merge_sort, quick_sort };
+    
+    for (int i=0; i<5; i++)
     {
         std::string sortName;
-        sort_func sort = get_sort_func(sortName);
-        
-        for (int i=0; i<6; i++)
+        switch (i)
         {
-            int arraySize = arraySizes[i];
+            case 0:
+                sortName = "Selection sort";
+                break;
+            case 1:
+                sortName = "Insertion sort";
+                break;
+            case 2:
+                sortName = "Bubble sort";
+                break;
+            case 3:
+                sortName = "Merge sort";
+                break;
+            case 4:
+                sortName = "Quick sort";
+                break;
+            default:
+                break;
+        }
+        
+        // sort_func sort = get_sort_func(sortName);
+
+        std::cout << "Sorting algorithm: " << sortName << "\n";
+        for (int j=0; j<6; j++)
+        {
+            int dataSize = dataSizes[j];
             int iterationCount = 10;
             
-            // std::cout << "Sorting " << arraySize << " elements...\n";
-            long long* resultArray = get_sort_time_taken_array(sort, arraySize, iterationCount);
+            // std::cout << "Sorting " << dataSize << " elements...\n";
+            long long* resultArray = get_sort_time_taken_array(sortFuncs[i], dataSize, iterationCount);
 
             double averageTimeTaken = get_average(resultArray, iterationCount);
             double medianTimeTaken = get_median(resultArray, iterationCount);
@@ -62,7 +87,7 @@ int main()
             
             SortResult sortResult;
             sortResult.sortName = sortName;
-            sortResult.arraySize = arraySize;
+            sortResult.arraySize = dataSize;
             sortResult.averageTimeTaken = nanoseconds_to_milliseconds(averageTimeTaken);
             sortResult.medianTimeTaken = nanoseconds_to_milliseconds(medianTimeTaken);
             sortResult.min = nanoseconds_to_milliseconds(min);
@@ -73,13 +98,12 @@ int main()
             delete [] resultArray;
             resultArray = nullptr;
         }
-        sort = nullptr;
+        // sort = nullptr;
 
-        IO::print_new_line();
-        std::cout << "Try again? (y/n)\n>>> ";
-        
-        std::cin >> reply;
-    } while (reply == "y");
+        // IO::print_new_line();
+        // std::cout << "Try again? (y/n)\n>>> ";
+        // std::cin >> reply;
+    }
     
     generate_csv_file(sortResultList, sortResultList.size(), "SortResult");
     

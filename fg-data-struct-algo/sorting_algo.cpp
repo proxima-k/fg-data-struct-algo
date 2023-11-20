@@ -74,6 +74,7 @@ int* selection_sort(int* array, int arraySize) {
         }
         currentItemIndex++;
     }
+    // std::cout << "Selection sort done" << std::endl;
     return array;
 }
 
@@ -192,7 +193,7 @@ int* quick_sort(int* array, int arraySize)
 long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iterationCount)
 {
     long long* resultArray = new long long[iterationCount];
-    
+
     for (int i = 0; i < iterationCount; i++)
     {
         int* array = DataStructures::create_array_random_values(arraySize);
