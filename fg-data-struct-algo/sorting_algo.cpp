@@ -213,7 +213,7 @@ long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iteratio
         resultArray[i] = timeTakenNanoseconds;
         
         delete [] array;
-        std::cout << "end of iteration " << i << std::endl;
+        // std::cout << "end of iteration " << i << std::endl;
     }
 
     
