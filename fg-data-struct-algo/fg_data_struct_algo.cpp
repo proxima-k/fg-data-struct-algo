@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <iomanip>
 #include <list>
 #include "sorting_algo.h"
 #include "utils.h"
 #include "performance.h"
+#include "DataStructures/Graph.h"
 
 using namespace Utils;
 
@@ -13,15 +15,51 @@ void task_2();
 
 int main()
 {
-    
-    
+    task_2();
     return 0;
 }
 
 
 void task_2()
 {
-    std::ifstream file ("Assignment");
+    Graph graph = Graph();
+
+    
+    std::ifstream file ("NodesData.txt");
+
+    if (file.is_open())
+    {
+        std::string line;
+        int row = 0;
+        while (getline(file, line))
+        {
+            for (int column=0; column < line.length(); column++)
+            {
+                std::string node;
+                if (line[column] == 'o')
+                {
+                    Node node = Node(vector2(column, row), 0, std::list<Node>());
+                    graph.add_node(node);
+                }
+                else if (line[column] == 'S') {
+                    Node startNode = Node(vector2(column, row), 0, std::list<Node>());
+                    graph.add_node(startNode);
+                }
+                else if (line[column] == 'G')
+                {
+                    Node endNode = Node(vector2(column, row), 0, std::list<Node>());
+                    graph.add_node(endNode);
+                } else 
+                {
+                }
+            }
+            // std::cout << '\n';
+            row++;
+        }
+        file.close();
+    }
+    else
+        std::cout << "Unable to open file";
 }
 
 
