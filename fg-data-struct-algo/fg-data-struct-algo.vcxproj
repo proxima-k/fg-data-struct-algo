@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClCompile Include="fg_data_struct_algo.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="performance.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="vector2.cpp" />
   </ItemGroup>
@@ -164,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="performance.h" />
     <ClInclude Include="sorting_algo.h" />
     <ClInclude Include="utils.h" />
     <ClInclude Include="vector2.h" />

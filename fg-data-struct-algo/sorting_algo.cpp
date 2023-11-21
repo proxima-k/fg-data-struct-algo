@@ -23,40 +23,37 @@ bool is_sorted(int* array, int arraySize)
 }
 
 
-sort_func get_sort_func(std::string& sortName)
+sort_func get_sort_func(int choice, std::string& out_sortName)
 {
-
-    int choice;
-
-    do
-    {
-        choice = IO::get_int_input("Select sorting algorithm:\n"
-                                   "1. Selection sort\n"
-                                   "2. Insertion sort\n"
-                                   "3. Bubble sort\n"
-                                   "4. Merge sort\n"
-                                   "5. Quick sort\n");
-
-        if (choice < 1 || choice > 5)
-            IO::print_message("Invalid choice. Please try again.");
-    } while (choice < 1 || choice > 5);
+    // do
+    // {
+    //     choice = IO::get_int_input("Select sorting algorithm:\n"
+    //                                "1. Selection sort\n"
+    //                                "2. Insertion sort\n"
+    //                                "3. Bubble sort\n"
+    //                                "4. Merge sort\n"
+    //                                "5. Quick sort\n");
+    //
+    //     if (choice < 1 || choice > 5)
+    //         IO::print_message("Invalid choice. Please try again.");
+    // } while (choice < 1 || choice > 5);
     
     switch (choice)
     {
     case 1:
-        sortName = "Selection sort";
+        out_sortName = "Selection sort";
         return selection_sort;
     case 2:
-        sortName = "Insertion sort";
+        out_sortName = "Insertion sort";
         return insertion_sort;
     case 3:
-        sortName = "Bubble sort";
+        out_sortName = "Bubble sort";
         return bubble_sort;
     case 4:
-        sortName = "Merge sort";
+        out_sortName = "Merge sort";
         return merge_sort;
     case 5:
-        sortName = "Quick sort";
+        out_sortName = "Quick sort";
         return quick_sort;
     default:
         return nullptr;

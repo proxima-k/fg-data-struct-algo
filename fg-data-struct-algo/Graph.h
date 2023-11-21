@@ -11,9 +11,9 @@ class Node
 public:
     // Node (vector2 position, int id, std::list<Node> neighbors);
     // constructor
-    vector2 Position() const { return position; }
-    int ID() const { return id; }
-    std::list<Node> Neighbours() const { return neighbors; }
+    vector2 get_position() const { return position; }
+    int get_id() const { return id; }
+    std::list<Node> get_neighbours() const { return neighbors; }
 
 private:
     vector2 position;
@@ -25,6 +25,10 @@ class Graph
 {
 public:
     // constructor
+    // breadth first search
+    // depth first search
+    // a* search
+    
 private:
     std::list<Node> nodes;
 };
