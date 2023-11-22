@@ -12,12 +12,29 @@ using namespace Utils;
 
 void task_1();
 void task_2();
+void task_3();
 
 int main()
 {
     task_2();
     return 0;
 }
+
+void task_3()
+{
+    std::list<int> numbers = {1, 2, 3, 4, 5};
+
+    for (int& number : numbers)
+    {
+        number += 1;
+    }
+
+    for (int number : numbers)
+    {
+        std::cout << number << "\n";
+    }
+}
+
 
 
 void task_2()
@@ -30,36 +47,86 @@ void task_2()
     if (file.is_open())
     {
         std::string line;
-        int row = 0;
+        int row = -1;
+        int id = 0;
+        int width= 0;
+        
         while (getline(file, line))
         {
+            row++;
             for (int column=0; column < line.length(); column++)
             {
-                std::string node;
-                if (line[column] == 'o')
+                // std::string node;
+                
+                if (line[column] == 'X')
                 {
-                    Node node = Node(vector2(column, row), 0, std::list<Node>());
-                    graph.add_node(node);
+                    std::cout << std::setw(5) << "";
+                    continue;
                 }
-                else if (line[column] == 'S') {
-                    Node startNode = Node(vector2(column, row), 0, std::list<Node>());
-                    graph.add_node(startNode);
-                }
-                else if (line[column] == 'G')
-                {
-                    Node endNode = Node(vector2(column, row), 0, std::list<Node>());
-                    graph.add_node(endNode);
-                } else 
-                {
-                }
+                Node node = Node(vector2(column, row), id, std::list<Node>());
+                graph.add_node(node);
+                id++;
+                // else if (line[column] == 'S') {
+                //     Node startNode = Node(vector2(column, row), id, std::list<Node>());
+                //     graph.add_node(startNode);
+                //     id++;
+                // }
+                // else if (line[column] == 'G')
+                // {
+                //     Node endNode = Node(vector2(column, row), id, std::list<Node>());
+                //     graph.add_node(endNode);
+                //     id++;
+                // }
+                if (width < column)
+                    width = column;
+
+                std::cout << std::setw(5) << node.get_id();
+                
             }
-            // std::cout << '\n';
-            row++;
+            std::cout << "\n";
         }
         file.close();
+
+
+        std::cout << "Assigning neighbours...\n";
+        for (Node& node : graph.nodes)
+        {
+            for (Node& otherNode : graph.nodes)
+            {
+                if (otherNode.get_position().x == node.get_position().x - 1 && otherNode.get_position().y == node.get_position().y)
+                {
+                    node.add_neighbour(otherNode);
+                }
+                else if (otherNode.get_position().x == node.get_position().x + 1 && otherNode.get_position().y == node.get_position().y)
+                {
+                    node.add_neighbour(otherNode);
+                }
+                else if (otherNode.get_position().x == node.get_position().x && otherNode.get_position().y == node.get_position().y - 1)
+                {
+                    node.add_neighbour(otherNode);
+                }
+                else if (otherNode.get_position().x == node.get_position().x && otherNode.get_position().y == node.get_position().y + 1)
+                {
+                    node.add_neighbour(otherNode);
+                }
+            }
+            node.print_neighbours();
+        }
+        
     }
     else
         std::cout << "Unable to open file";
+
+    Utils::IO::print_new_line();
+    Utils::IO::print_new_line();
+    // if previous node x is same as current node x - 1
+
+    // graph.print_graph();
+    
+    for (Node& node : graph.nodes)
+    {
+        node.print_neighbours();
+    }
 }
 
 
