@@ -4,44 +4,58 @@
 #include <iostream>
 #include <iomanip>
 
-void Graph::add_node(Node node)
+Graph::~Graph()
 {
-    nodes.push_back(node);
+    for (Node* node : nodes_)
+    {
+        delete node;
+        node = nullptr;
+    }
+    nodes_.clear();
 }
 
-void Graph::print_graph() const
+void Graph::add_node(Node* node)
 {
-    Node previousNode = *get_nodes().begin();
+    nodes_.push_back(node);
+}
 
-    for (Node node : nodes)
+void Graph::print_graph()
+{
+    Node* previousNode = nodes_.front();
+    
+    for (Node* node : nodes_)
     {
-        node.print_neighbours();
+        // node->print_neighbors();
         // node.print_neighbours();
-        // if (node.get_position().y == previousNode.get_position().y)
-        // {
-        //     int distance = node.get_position().x - previousNode.get_position().x;
-        //     for (int i=0; i<distance-1; i++)
-        //     {
-        //         std::cout << std::setw(5) << "";
-        //     }
-        // }
-        // else
-        // {
-        //     std::cout << "\n";
-        // }
-        //
-        // std::cout << std::setw(5) << node.get_neighbours().size();
-        //
-        //
-        // previousNode = node;
-        // std::cout << node.get_position().x << " " << node.get_position().y << std::endl;
+        if (node->get_position().y == previousNode->get_position().y)
+        {
+            int distance = node->get_position().x - previousNode->get_position().x;
+            for (int i=0; i<distance-1; i++)
+            {
+                std::cout << std::setw(5) << "";
+            }
+        }
+        else
+        {
+            std::cout << "\n";
+            for (int i=0; i<node->get_position().x; i++)
+            {
+                std::cout << std::setw(5) << "";
+            }
+        }
+        
+        std::cout << std::setw(5) << node->get_neighbors().size();
+        
+        
+        previousNode = node;
+        // std::cout << node->get_position().x << " " << node->get_position().y << std::endl;
     }
 }
 
 
 bool Graph::breadth_first_search(Node start, Node end) const
 {
-    bool* visited = new bool[nodes.size()];
+    bool* visited = new bool[nodes_.size()];
     std::queue<Node> toVisit;
     toVisit.push(start);
 
@@ -56,52 +70,17 @@ bool Graph::breadth_first_search(Node start, Node end) const
             return true;
         }
 
-        for (const Node& neighbor : current.get_neighbours())
-        {
-            if (!visited[neighbor.get_id()])
-            {
-                toVisit.push(neighbor);
-                visited[neighbor.get_id()] = true;
-            }
-        }
+        // for (const Node& neighbor : current.get_neighbours())
+        // {
+        //     if (!visited[neighbor.get_id()])
+        //     {
+        //         toVisit.push(neighbor);
+        //         visited[neighbor.get_id()] = true;
+        //     }
+        // }
     }
     
     return false;
 }
 
-Node::Node()
-{
-    this->position_ = vector2(0, 0);
-    this->id_ = 0;
-    this->neighbors_ = std::list<Node>();
-}
 
-Node::Node(vector2 position, int id, std::list<Node> neighbors)
-{
-    this->position_ = position;
-    this->id_ = id;
-    this->neighbors_ = neighbors;
-}
-
-const std::list<Node>& Node::get_neighbours() const
-{
-    return this->neighbors_;
-}
-
-void Node::add_neighbour(Node neighbour)
-{
-    this->neighbors_.push_back(neighbour);
-
-    // std::cout << "Added neighbour to node " << this->id_ << std::endl; 
-    // std::cout << neighbour.get_position().x << " " << neighbour.get_position().y << std::endl;
-    // std::cout << neighbors_.size() << std::endl;
-}
-
-void Node::print_neighbours() const
-{
-    std::cout << "Printing neighbours for node " << this->id_ << std::endl;
-    for (Node neighbor : this->neighbors_)
-    {
-        std::cout << neighbor.get_position().x << " " << neighbor.get_position().y << std::endl;
-    }
-}

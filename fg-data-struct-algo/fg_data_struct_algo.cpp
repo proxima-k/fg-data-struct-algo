@@ -22,19 +22,25 @@ int main()
 
 void task_3()
 {
-    std::list<int> numbers = {1, 2, 3, 4, 5};
+    Node node1 = Node(vector2(0, 0), 0);
+    Node node2 = Node(vector2(1, 0), 1);
+    Node node3 = Node(vector2(2, 0), 2);
+    
+    node1.add_neighbor(&node2);
+    node1.add_neighbor(&node3);
 
-    for (int& number : numbers)
-    {
-        number += 1;
-    }
+    // node1.print_neighbours();
 
-    for (int number : numbers)
+    std::cout << &node1 << std::endl;
+    std::cout << &node2 << std::endl;
+    std::cout << &node3 << std::endl;
+
+    for (Node* node : node1.get_neighbors())
     {
-        std::cout << number << "\n";
+        std::cout << node << std::endl;
+        node->add_neighbor(&node1);
     }
 }
-
 
 
 void task_2()
@@ -63,7 +69,7 @@ void task_2()
                     std::cout << std::setw(5) << "";
                     continue;
                 }
-                Node node = Node(vector2(column, row), id, std::list<Node>());
+                Node* node = new Node(vector2(column, row), id);
                 graph.add_node(node);
                 id++;
                 // else if (line[column] == 'S') {
@@ -80,55 +86,48 @@ void task_2()
                 if (width < column)
                     width = column;
 
-                std::cout << std::setw(5) << node.get_id();
-                
+                std::cout << std::setw(5) << node->get_id();
+                // std::cout << node << std::endl;
             }
             std::cout << "\n";
         }
         file.close();
 
-
         std::cout << "Assigning neighbours...\n";
-        for (Node& node : graph.nodes)
+        for (Node* node : graph.get_nodes())
         {
-            for (Node& otherNode : graph.nodes)
+            for (Node* otherNode : graph.get_nodes())
             {
-                if (otherNode.get_position().x == node.get_position().x - 1 && otherNode.get_position().y == node.get_position().y)
+                if (otherNode->get_position().x == node->get_position().x - 1 && otherNode->get_position().y == node->get_position().y)
                 {
-                    node.add_neighbour(otherNode);
+                    node->add_neighbor(otherNode);
                 }
-                else if (otherNode.get_position().x == node.get_position().x + 1 && otherNode.get_position().y == node.get_position().y)
+                else if (otherNode->get_position().x == node->get_position().x + 1 && otherNode->get_position().y == node->get_position().y)
                 {
-                    node.add_neighbour(otherNode);
+                    node->add_neighbor(otherNode);
                 }
-                else if (otherNode.get_position().x == node.get_position().x && otherNode.get_position().y == node.get_position().y - 1)
+                else if (otherNode->get_position().x == node->get_position().x && otherNode->get_position().y == node->get_position().y - 1)
                 {
-                    node.add_neighbour(otherNode);
+                    node->add_neighbor(otherNode);
                 }
-                else if (otherNode.get_position().x == node.get_position().x && otherNode.get_position().y == node.get_position().y + 1)
+                else if (otherNode->get_position().x == node->get_position().x && otherNode->get_position().y == node->get_position().y + 1)
                 {
-                    node.add_neighbour(otherNode);
+                    node->add_neighbor(otherNode);
                 }
             }
-            node.print_neighbours();
         }
         
     }
     else
         std::cout << "Unable to open file";
 
-    Utils::IO::print_new_line();
-    Utils::IO::print_new_line();
+    IO::print_new_line();
+    IO::print_new_line();
     // if previous node x is same as current node x - 1
 
-    // graph.print_graph();
-    
-    for (Node& node : graph.nodes)
-    {
-        node.print_neighbours();
-    }
-}
+    graph.print_graph();
 
+}
 
 void task_1()
 {

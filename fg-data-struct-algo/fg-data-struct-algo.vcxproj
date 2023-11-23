@@ -228,6 +228,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="DataStructures\Node.cpp" />
     <ClCompile Include="DataStructures\vector2.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -311,6 +312,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructures\Graph.h" />
+    <ClInclude Include="DataStructures\Node.h" />
     <ClInclude Include="DataStructures\vector2.h" />
     <ClInclude Include="performance.h" />
     <ClInclude Include="sorting_algo.h" />
