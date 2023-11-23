@@ -1,6 +1,7 @@
 #include "Graph.h"
 
 #include <queue>
+#include <stack>
 #include <iostream>
 #include <iomanip>
 
@@ -53,34 +54,89 @@ void Graph::print_graph()
 }
 
 
-bool Graph::breadth_first_search(Node start, Node end) const
+bool Graph::breadth_first_search(Node* start, Node* end) const
 {
     bool* visited = new bool[nodes_.size()];
-    std::queue<Node> toVisit;
+    for (int i=0; i<nodes_.size(); i++)
+    {
+        visited[i] = false;
+    }
+    
+    std::queue<Node*> toVisit;
     toVisit.push(start);
-
-
+    visited[start->get_id()] = true;
+    
     while (!toVisit.empty())
     {
-        Node current = toVisit.front();
+        Node* current = toVisit.front();
+
+        // std::cout << "Visiting node " << current->get_id() << std::endl;
         toVisit.pop();
         
-        if (current.get_id() == end.get_id())
+        if (current->get_id() == end->get_id())
         {
             return true;
         }
 
-        // for (const Node& neighbor : current.get_neighbours())
-        // {
-        //     if (!visited[neighbor.get_id()])
-        //     {
-        //         toVisit.push(neighbor);
-        //         visited[neighbor.get_id()] = true;
-        //     }
-        // }
+        for (Node* neighbor : current->get_neighbors())
+        {
+            // std::cout << "Checking neighbor " << neighbor->get_id() << std::endl;
+
+            // std::cout << visited[neighbor->get_id()] << std::endl;
+            if (!visited[neighbor->get_id()])
+            {
+                toVisit.push(neighbor);
+                visited[neighbor->get_id()] = true;
+            }
+        }
     }
+
+    delete [] visited;
+    visited = nullptr;
     
     return false;
 }
 
+bool Graph::depth_first_search(Node* start, Node* end) const
+{
+    bool* visited = new bool[nodes_.size()];
+    for (int i=0; i<nodes_.size(); i++)
+    {
+        visited[i] = false;
+    }
+    
+    std::stack<Node*> toVisit;
+    toVisit.push(start);
+    visited[start->get_id()] = true;
+    
+    while (!toVisit.empty())
+    {
+        Node* current = toVisit.top();
+
+        std::cout << "Visiting node " << current->get_id() << std::endl;
+        toVisit.pop();
+        
+        if (current->get_id() == end->get_id())
+        {
+            return true;
+        }
+
+        for (Node* neighbor : current->get_neighbors())
+        {
+            // std::cout << "Checking neighbor " << neighbor->get_id() << std::endl;
+
+            // std::cout << visited[neighbor->get_id()] << std::endl;
+            if (!visited[neighbor->get_id()])
+            {
+                toVisit.push(neighbor);
+                visited[neighbor->get_id()] = true;
+            }
+        }
+    }
+
+    delete [] visited;
+    visited = nullptr;
+    
+    return false;
+}
 

@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -46,7 +47,8 @@ void task_3()
 void task_2()
 {
     Graph graph = Graph();
-
+    Node* startNode = nullptr;
+    Node* endNode = nullptr;
     
     std::ifstream file ("NodesData.txt");
 
@@ -72,17 +74,16 @@ void task_2()
                 Node* node = new Node(vector2(column, row), id);
                 graph.add_node(node);
                 id++;
-                // else if (line[column] == 'S') {
-                //     Node startNode = Node(vector2(column, row), id, std::list<Node>());
-                //     graph.add_node(startNode);
-                //     id++;
-                // }
-                // else if (line[column] == 'G')
-                // {
-                //     Node endNode = Node(vector2(column, row), id, std::list<Node>());
-                //     graph.add_node(endNode);
-                //     id++;
-                // }
+
+                if (line[column] == 'S')
+                {
+                    startNode = node;
+                }
+                else if (line[column] == 'G')
+                {
+                    endNode = node;
+                }
+                
                 if (width < column)
                     width = column;
 
@@ -125,7 +126,28 @@ void task_2()
     IO::print_new_line();
     // if previous node x is same as current node x - 1
 
-    graph.print_graph();
+    // graph.print_graph();
+
+    std::string reply;
+    while (reply != "y")
+    {
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        bool sucess = graph.depth_first_search(startNode, endNode);
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+        std::cout << "Time taken: " << std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin).count() << " ns\n";
+        if (sucess)
+        {
+            std::cout << "Path found!\n";
+        }
+        else
+        {
+            std::cout << "Path not found!\n";
+        }
+
+        std::cout << "Do you want to exit? (y/n): ";
+        std::cin >> reply;
+    }
 
 }
 

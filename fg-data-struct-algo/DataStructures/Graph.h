@@ -19,7 +19,8 @@ public:
     
     void add_node(Node* node);
     void print_graph();
-    bool breadth_first_search(Node start, Node end) const;
+    bool breadth_first_search(Node* start, Node* end) const;
+    bool depth_first_search(Node* start, Node* end) const;
 
     // void print_graph() const;
     ~Graph();
