@@ -1,6 +1,6 @@
 #include "sorting_algo.h"
 #include <chrono>
-#include "utils.h"
+#include "../Utilities/utils.h"
 #include <iostream>
 using namespace Utils;
 
@@ -22,22 +22,27 @@ bool is_sorted(int* array, int arraySize)
     return true;
 }
 
+sort_func prompt_sort_func(std::string& out_sortName)
+{
+    int choice;
+    do
+    {
+        choice = IO::get_int_input("Select sorting algorithm:\n"
+                                       "1. Selection sort\n"
+                                       "2. Insertion sort\n"
+                                       "3. Bubble sort\n"
+                                       "4. Merge sort\n"
+                                       "5. Quick sort\n");
+
+        if (choice < 1 || choice > 5)
+            IO::print_message("Invalid choice. Please try again.");
+    } while (choice < 1 || choice > 5);
+    
+    return get_sort_func(choice, out_sortName);
+}
 
 sort_func get_sort_func(int choice, std::string& out_sortName)
 {
-    // do
-    // {
-    //     choice = IO::get_int_input("Select sorting algorithm:\n"
-    //                                "1. Selection sort\n"
-    //                                "2. Insertion sort\n"
-    //                                "3. Bubble sort\n"
-    //                                "4. Merge sort\n"
-    //                                "5. Quick sort\n");
-    //
-    //     if (choice < 1 || choice > 5)
-    //         IO::print_message("Invalid choice. Please try again.");
-    // } while (choice < 1 || choice > 5);
-    
     switch (choice)
     {
     case 1:

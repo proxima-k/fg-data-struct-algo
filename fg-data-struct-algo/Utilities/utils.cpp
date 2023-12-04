@@ -33,14 +33,14 @@ int Utils::IO::get_int_input(const char* prompt)
 
     std::cout << prompt << ">>> ";
     while (!validInput) {
-        try {
-            std::cin >> input;
-            validInput = true;
-        } catch (std::exception& e) {
-            std::cout << "Invalid integer. Please try again.\n>>> " << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin >> input;
+        if (!std::cin.fail())
+        {
+            break;
         }
+        std::cout << "Invalid integer. Please try again.\n>>> ";
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
     
     return input;

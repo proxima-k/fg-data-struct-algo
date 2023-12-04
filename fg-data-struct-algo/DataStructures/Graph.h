@@ -18,7 +18,7 @@ public:
     std::list<Node*> get_nodes() const { return nodes_; }
     
     void add_node(Node* node);
-    void print_graph();
+    void print_graph() const;
     bool breadth_first_search(Node* start, Node* end) const;
     bool depth_first_search(Node* start, Node* end) const;
 

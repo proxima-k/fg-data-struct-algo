@@ -8,6 +8,7 @@ void swap(T* a, T* b);
 bool is_sorted(int* array, int arraySize);
 
 typedef int* (*sort_func)(int* array, int arraySize);
+sort_func prompt_sort_func(std::string& sortName);
 sort_func get_sort_func(int choice, std::string& sortName);
 
 

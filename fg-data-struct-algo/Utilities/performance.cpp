@@ -3,7 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <list>
-#include "sorting_algo.h"
+#include "../SortAlgorithms/sorting_algo.h"
 
 double get_average(long long* array, int arraySize)
 {

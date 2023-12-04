@@ -1,9 +1,12 @@
 #include "Graph.h"
-
+#include "../Utilities/utils.h"
 #include <queue>
 #include <stack>
 #include <iostream>
 #include <iomanip>
+
+using namespace Utils;
+
 
 Graph::~Graph()
 {
@@ -20,7 +23,7 @@ void Graph::add_node(Node* node)
     nodes_.push_back(node);
 }
 
-void Graph::print_graph()
+void Graph::print_graph() const
 {
     Node* previousNode = nodes_.front();
     
@@ -51,8 +54,8 @@ void Graph::print_graph()
         previousNode = node;
         // std::cout << node->get_position().x << " " << node->get_position().y << std::endl;
     }
+    std::cout << "\n";
 }
-
 
 bool Graph::breadth_first_search(Node* start, Node* end) const
 {
@@ -113,7 +116,7 @@ bool Graph::depth_first_search(Node* start, Node* end) const
     {
         Node* current = toVisit.top();
 
-        std::cout << "Visiting node " << current->get_id() << std::endl;
+        // std::cout << "Visiting node " << current->get_id() << std::endl;
         toVisit.pop();
         
         if (current->get_id() == end->get_id())
