@@ -18,6 +18,9 @@ void manual_measurements();
 // graph
 void load_from_file_graph();
 
+void print_time_taken_summary(long long* resultArray, int arraySize, bool showIterations = false);
+void print_title(std::string title);
+
 int main()
 {
     load_from_file_graph();
@@ -51,29 +54,9 @@ void manual_measurements()
         for (int i=0; i<batchSize; i++) {
             long long* resultArray = get_sort_time_taken_array(sort_func, dataSize, iterationCount);
             
-            double averageTimeTaken = get_average(resultArray, iterationCount);
-            double medianTimeTaken = get_median(resultArray, iterationCount);
-            double min = get_min(resultArray, iterationCount);
-            double max = get_max(resultArray, iterationCount);
-            
-            averageTimeTaken = nanoseconds_to_milliseconds(averageTimeTaken);
-            medianTimeTaken = nanoseconds_to_milliseconds(medianTimeTaken);
-            min = nanoseconds_to_milliseconds(min);
-            max = nanoseconds_to_milliseconds(max);
-
-            // print results
             std::cout << "Batch " << i+1 << "\n";
-            for (int i=0; i<iterationCount; i++)
-            {
-                std::cout << std::fixed;
-                std::cout << std::setprecision(8);
-                std::cout << "Iteration " << std::setw(3) << i+1 << ": " << nanoseconds_to_milliseconds(resultArray[i]) << " ms\n";
-            }
-            std::cout << "Average: " << averageTimeTaken << " ms\n";
-            std::cout << "Median: " << medianTimeTaken << " ms\n";
-            std::cout << "Min: " << min << " ms\n";
-            std::cout << "Max: " << max << " ms\n";
-            std::cout << std::endl;
+
+            print_time_taken_summary(resultArray, iterationCount);
             
             delete [] resultArray;
             resultArray = nullptr;
@@ -115,10 +98,10 @@ void auto_generate_measurements() {
             SortResult sortResult;
             sortResult.sortName = sortFuncName;
             sortResult.arraySize = dataSizes[j];
-            sortResult.averageTimeTaken = nanoseconds_to_milliseconds(averageTimeTaken);
-            sortResult.medianTimeTaken = nanoseconds_to_milliseconds(medianTimeTaken);
-            sortResult.min = nanoseconds_to_milliseconds(min);
-            sortResult.max = nanoseconds_to_milliseconds(max);
+            sortResult.averageTimeTaken = nano_to_milli(averageTimeTaken);
+            sortResult.medianTimeTaken = nano_to_milli(medianTimeTaken);
+            sortResult.min = nano_to_milli(min);
+            sortResult.max = nano_to_milli(max);
 
             sortResultList.push_back(sortResult);
             
@@ -214,58 +197,53 @@ void load_from_file_graph()
     }
 
     IO::print_new_line();
-    IO::print_new_line();
-
     // graph.print_graph();
 
     std::string reply;
     while (reply != "y") {
+
         int iterationCount = IO::get_int_input("Iteration count?\n");
-        for (int i=0; i<iterationCount; i++) {
-            // depth first search
-            std::cout << "Depth first search\n";
-            
+        int showIterations = IO::get_int_input("Show iterations? (1/0)\n");
+        
+        long long * resultArray = new long long[iterationCount];
+        bool sucess = false;
+        // depth first search
+        print_title("Depth first search");
+        for (int i=0; i<iterationCount; i++)
+        {
             std::chrono::steady_clock::time_point beginDFS = std::chrono::steady_clock::now();
-            bool sucess = graph.depth_first_search(startNode, endNode);
+            sucess = graph.depth_first_search(startNode, endNode);
             std::chrono::steady_clock::time_point endDFS = std::chrono::steady_clock::now();
 
-            
-            if (sucess) {
-                std::cout << "Path found!\n";
-            }
-            else {
-                std::cout << "Path not found!\n";
-            }
-
             long long timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(endDFS - beginDFS).count();
-            double timeTakenMilliseconds = nanoseconds_to_milliseconds(timeTakenNanoseconds);
+            resultArray[i] = timeTakenNanoseconds;
+        }
 
-            std::cout << std::fixed;
-            std::cout << std::setprecision(8);
-            std::cout << "Time taken: " << timeTakenMilliseconds << " ms\n";
-
-            // breadth first search
-            std::cout << "Breadth first search\n";
-            
+        if (sucess)
+            std::cout << "Path found!\n";
+        else
+            std::cout << "Path not found!\n";
+        
+        print_time_taken_summary(resultArray, iterationCount, showIterations);
+        
+        // breadth first search
+        print_title("Breadth first search");
+        for (int i=0; i<iterationCount; i++)
+        {
             std::chrono::steady_clock::time_point beginBFS = std::chrono::steady_clock::now();
             sucess = graph.breadth_first_search(startNode, endNode);
             std::chrono::steady_clock::time_point endBFS = std::chrono::steady_clock::now();
 
-            if (sucess) {
-                std::cout << "Path found!\n";
-            }
-            else {
-                std::cout << "Path not found!\n";
-            }
-
-            timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(endBFS - beginBFS).count();
-            timeTakenMilliseconds = nanoseconds_to_milliseconds(timeTakenNanoseconds);
-
-            std::cout << std::fixed;
-            std::cout << std::setprecision(8);
-            std::cout << "Time taken: " << timeTakenMilliseconds << " ms\n";
+            long long timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(endBFS - beginBFS).count();
+            resultArray[i] = timeTakenNanoseconds;
         }
 
+        if (sucess)
+            std::cout << "Path found!\n";
+        else
+            std::cout << "Path not found!\n";
+        
+        print_time_taken_summary(resultArray, iterationCount, showIterations);
         
         std::cout << std::endl;
         std::cout << "Do you want to exit? (y/n): ";
@@ -294,5 +272,43 @@ void task_3()
         std::cout << node << std::endl;
         node->add_neighbor(&node1);
     }
+}
+
+
+void print_title(std::string title)
+{
+    std::cout <<
+        std::setw(7) << std::setfill('=') << "" << " " <<
+        title << " " <<
+        std::setw(7) << std::setfill('=') << "" << "\n";
+}
+
+
+void print_time_taken_summary(long long* resultArray, int arraySize, bool showIterations)
+{
+    double averageTimeTaken = get_average(resultArray, arraySize);
+    double medianTimeTaken = get_median(resultArray, arraySize);
+    double min = get_min(resultArray, arraySize);
+    double max = get_max(resultArray, arraySize);
+            
+    averageTimeTaken = nano_to_milli(averageTimeTaken);
+    medianTimeTaken = nano_to_milli(medianTimeTaken);
+    min = nano_to_milli(min);
+    max = nano_to_milli(max);
+
+    std::cout << std::fixed;
+    std::cout << std::setprecision(8);
+    if (showIterations)
+    {
+        for (int i=0; i<arraySize; i++)
+        {
+            std::cout << "Iteration " << std::setw(3) << i+1 << ": " << nano_to_milli(resultArray[i]) << " ms\n";
+        }
+    }
+    std::cout << "Average: " << averageTimeTaken << " ms\n";
+    std::cout << "Median: " << medianTimeTaken << " ms\n";
+    std::cout << "Min: " << min << " ms\n";
+    std::cout << "Max: " << max << " ms\n";
+    std::cout << std::endl;
 }
 

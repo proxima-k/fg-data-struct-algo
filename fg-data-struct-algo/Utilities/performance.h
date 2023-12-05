@@ -20,6 +20,6 @@ double get_median(long long* array, int arraySize, bool isSorted = false);
 double get_min(long long* array, int arraySize);
 double get_max(long long* array, int arraySize);
 void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std::string fileName);
-double nanoseconds_to_milliseconds(double nanoseconds);
+double nano_to_milli(double nanoseconds);
 
 #endif // PERFORMANCE_H

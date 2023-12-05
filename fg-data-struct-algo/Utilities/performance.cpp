@@ -57,7 +57,7 @@ double get_max(long long* array, int arraySize)
     return max;
 }
 
-double nanoseconds_to_milliseconds(double nanoseconds)
+double nano_to_milli(double nanoseconds)
 {
     return nanoseconds / 1000000.0;
 }
