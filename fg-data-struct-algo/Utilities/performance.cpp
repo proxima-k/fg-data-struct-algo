@@ -5,6 +5,38 @@
 #include <list>
 #include "../SortAlgorithms/sorting_algo.h"
 
+
+void TimeTakenResult::change_to_milliseconds()
+{
+    averageTimeTaken = nano_to_milli(averageTimeTaken);
+    medianTimeTaken = nano_to_milli(medianTimeTaken);
+    min = nano_to_milli(min);
+    max = nano_to_milli(max);
+}
+
+TimeTakenResult::TimeTakenResult()
+{
+    timeTakenArray = nullptr;
+}
+
+TimeTakenResult::~TimeTakenResult()
+{
+    // delete [] timeTakenArray;
+    timeTakenArray = nullptr;
+}
+
+TimeTakenResult get_time_taken_result(long long* timeTakenArray, int arraySize)
+{
+    TimeTakenResult result;
+    result.arraySize = arraySize;
+    result.timeTakenArray = timeTakenArray;
+    result.averageTimeTaken = get_average(timeTakenArray, arraySize);
+    result.medianTimeTaken = get_median(timeTakenArray, arraySize);
+    result.min = get_min(timeTakenArray, arraySize);
+    result.max = get_max(timeTakenArray, arraySize);
+    return result;
+}
+
 double get_average(long long* array, int arraySize)
 {
     long long sum = 0;
@@ -57,9 +89,9 @@ double get_max(long long* array, int arraySize)
     return max;
 }
 
-double nanoseconds_to_milliseconds(double nanoseconds)
+double nano_to_milli(double nano)
 {
-    return nanoseconds / 1000000.0;
+    return nano / 1000000.0;
 }
 
 
@@ -79,11 +111,12 @@ void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std
     csvFile.precision(8);
     for (const auto& sortResult : sortResultArray)
     {
-        csvFile << sortResult.sortName << " (" << sortResult.arraySize << "), "
-                << sortResult.averageTimeTaken << ", "
-                << sortResult.medianTimeTaken << ", "
-                << sortResult.min << ", "
-                << sortResult.max << "\n";
+        TimeTakenResult timeTakenResult = sortResult.timeTakenResult;
+        csvFile << sortResult.sortName << " (" << timeTakenResult.arraySize << "), "
+                << timeTakenResult.averageTimeTaken << ", "
+                << timeTakenResult.medianTimeTaken << ", "
+                << timeTakenResult.min << ", "
+                << timeTakenResult.max << "\n";
     }
     csvFile.close();
 }

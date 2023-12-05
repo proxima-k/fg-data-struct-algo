@@ -16,11 +16,11 @@ void auto_generate_measurements();
 void manual_measurements();
 
 // graph
-void load_from_file_graph();
+void graph_search();
 
 int main()
 {
-    load_from_file_graph();
+    graph_search();
     return 0;
 }
 
@@ -50,16 +50,13 @@ void manual_measurements()
         // time measurements
         for (int i=0; i<batchSize; i++) {
             long long* resultArray = get_sort_time_taken_array(sort_func, dataSize, iterationCount);
+
+            TimeTakenResult timeTakenResult = get_time_taken_result(resultArray, iterationCount);
             
-            double averageTimeTaken = get_average(resultArray, iterationCount);
-            double medianTimeTaken = get_median(resultArray, iterationCount);
-            double min = get_min(resultArray, iterationCount);
-            double max = get_max(resultArray, iterationCount);
-            
-            averageTimeTaken = nanoseconds_to_milliseconds(averageTimeTaken);
-            medianTimeTaken = nanoseconds_to_milliseconds(medianTimeTaken);
-            min = nanoseconds_to_milliseconds(min);
-            max = nanoseconds_to_milliseconds(max);
+            double averageTimeTaken = nano_to_milli(timeTakenResult.averageTimeTaken);
+            double medianTimeTaken = nano_to_milli(timeTakenResult.medianTimeTaken);
+            double min = nano_to_milli(timeTakenResult.min);
+            double max = nano_to_milli(timeTakenResult.max);
 
             // print results
             std::cout << "Batch " << i+1 << "\n";
@@ -67,7 +64,7 @@ void manual_measurements()
             {
                 std::cout << std::fixed;
                 std::cout << std::setprecision(8);
-                std::cout << "Iteration " << std::setw(3) << i+1 << ": " << nanoseconds_to_milliseconds(resultArray[i]) << " ms\n";
+                std::cout << "Iteration " << std::setw(3) << i+1 << ": " << nano_to_milli(resultArray[i]) << " ms\n";
             }
             std::cout << "Average: " << averageTimeTaken << " ms\n";
             std::cout << "Median: " << medianTimeTaken << " ms\n";
@@ -107,18 +104,12 @@ void auto_generate_measurements() {
         {
             long long* resultArray = get_sort_time_taken_array(sort_func, dataSizes[j], iterationCount);
 
-            double averageTimeTaken = get_average(resultArray, iterationCount);
-            double medianTimeTaken = get_median(resultArray, iterationCount);
-            double min = get_min(resultArray, iterationCount);
-            double max = get_max(resultArray, iterationCount);
+            TimeTakenResult timeTakenResult = get_time_taken_result(resultArray, iterationCount);
+            timeTakenResult.change_to_milliseconds();
             
             SortResult sortResult;
             sortResult.sortName = sortFuncName;
-            sortResult.arraySize = dataSizes[j];
-            sortResult.averageTimeTaken = nanoseconds_to_milliseconds(averageTimeTaken);
-            sortResult.medianTimeTaken = nanoseconds_to_milliseconds(medianTimeTaken);
-            sortResult.min = nanoseconds_to_milliseconds(min);
-            sortResult.max = nanoseconds_to_milliseconds(max);
+            sortResult.timeTakenResult = timeTakenResult;
 
             sortResultList.push_back(sortResult);
             
@@ -130,8 +121,7 @@ void auto_generate_measurements() {
     
     generate_csv_file(sortResultList, sortResultList.size(), "SortResult");
 }
-
-void load_from_file_graph()
+void graph_search()
 {
     Graph graph = Graph();
     Node* startNode = nullptr;
@@ -238,7 +228,7 @@ void load_from_file_graph()
             }
 
             long long timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(endDFS - beginDFS).count();
-            double timeTakenMilliseconds = nanoseconds_to_milliseconds(timeTakenNanoseconds);
+            double timeTakenMilliseconds = nano_to_milli(timeTakenNanoseconds);
 
             std::cout << std::fixed;
             std::cout << std::setprecision(8);
@@ -259,7 +249,7 @@ void load_from_file_graph()
             }
 
             timeTakenNanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(endBFS - beginBFS).count();
-            timeTakenMilliseconds = nanoseconds_to_milliseconds(timeTakenNanoseconds);
+            timeTakenMilliseconds = nano_to_milli(timeTakenNanoseconds);
 
             std::cout << std::fixed;
             std::cout << std::setprecision(8);
