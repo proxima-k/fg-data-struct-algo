@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <iostream>
+#include <iomanip>
 #include <random>
 #include <string>
 
@@ -55,5 +56,15 @@ int* Utils::DataStructures::create_array_random_values(int arraySize, int minVal
         array[i] = rand() % maxValue + minValue;
     }
     return array;
+}
+
+void Utils::IO::print_title(std::string title)
+{
+    std::cout <<
+        std::setw(7) << std::setfill('=') << "" << " " <<
+        title << " " <<
+        std::setw(7) << std::setfill('=') << "" << "\n";
+
+    std::cout << std::setfill(' '); // reset fill character
 }
 

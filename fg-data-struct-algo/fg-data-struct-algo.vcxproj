@@ -378,6 +378,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="task.cpp" />
     <ClCompile Include="Utilities\performance.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -532,6 +533,7 @@
     <ClInclude Include="DataStructures\Node.h" />
     <ClInclude Include="DataStructures\vector2.h" />
     <ClInclude Include="SortAlgorithms\sorting_algo.h" />
+    <ClInclude Include="task.h" />
     <ClInclude Include="Utilities\performance.h" />
     <ClInclude Include="Utilities\utils.h" />
   </ItemGroup>

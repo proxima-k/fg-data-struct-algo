@@ -8,7 +8,6 @@ struct SortResult
 {
     std::string sortName;
     int arraySize;
-    // long long* timeTakenArray;
     double averageTimeTaken;
     double medianTimeTaken;
     double min;
@@ -19,7 +18,10 @@ double get_average(long long* array, int arraySize);
 double get_median(long long* array, int arraySize, bool isSorted = false);
 double get_min(long long* array, int arraySize);
 double get_max(long long* array, int arraySize);
-void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std::string fileName);
 double nano_to_milli(double nanoseconds);
+
+// functions to display/export data
+void print_time_taken_summary(long long* resultArray, int arraySize, bool showIterations = false);
+void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std::string fileName);
 
 #endif // PERFORMANCE_H

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <list>
 #include "../SortAlgorithms/sorting_algo.h"
 
@@ -86,4 +87,32 @@ void generate_csv_file(std::list<SortResult> sortResultArray, int arraySize, std
                 << sortResult.max << "\n";
     }
     csvFile.close();
+}
+
+void print_time_taken_summary(long long* resultArray, int arraySize, bool showIterations)
+{
+    double averageTimeTaken = get_average(resultArray, arraySize);
+    double medianTimeTaken = get_median(resultArray, arraySize);
+    double min = get_min(resultArray, arraySize);
+    double max = get_max(resultArray, arraySize);
+            
+    averageTimeTaken = nano_to_milli(averageTimeTaken);
+    medianTimeTaken = nano_to_milli(medianTimeTaken);
+    min = nano_to_milli(min);
+    max = nano_to_milli(max);
+
+    std::cout << std::fixed;
+    std::cout << std::setprecision(8);
+    if (showIterations)
+    {
+        for (int i=0; i<arraySize; i++)
+        {
+            std::cout << "Iteration " << std::setw(3) << i+1 << ": " << nano_to_milli(resultArray[i]) << " ms\n";
+        }
+    }
+    std::cout << "Average: " << averageTimeTaken << " ms\n";
+    std::cout << "Median: " << medianTimeTaken << " ms\n";
+    std::cout << "Min: " << min << " ms\n";
+    std::cout << "Max: " << max << " ms\n";
+    std::cout << std::endl;
 }

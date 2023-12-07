@@ -12,58 +12,6 @@ void swap(T* a, T* b)
     *b = temp;
 }
 
-bool is_sorted(int* array, int arraySize)
-{
-    for (int i = 0; i < arraySize - 1; i++)
-    {
-        if (array[i] > array[i + 1])
-            return false;
-    }
-    return true;
-}
-
-sort_func prompt_sort_func(std::string& out_sortName)
-{
-    int choice;
-    do
-    {
-        choice = IO::get_int_input("Select sorting algorithm:\n"
-                                       "1. Selection sort\n"
-                                       "2. Insertion sort\n"
-                                       "3. Bubble sort\n"
-                                       "4. Merge sort\n"
-                                       "5. Quick sort\n");
-
-        if (choice < 1 || choice > 5)
-            IO::print_message("Invalid choice. Please try again.");
-    } while (choice < 1 || choice > 5);
-    
-    return get_sort_func(choice, out_sortName);
-}
-
-sort_func get_sort_func(int choice, std::string& out_sortName)
-{
-    switch (choice)
-    {
-    case 1:
-        out_sortName = "Selection sort";
-        return selection_sort;
-    case 2:
-        out_sortName = "Insertion sort";
-        return insertion_sort;
-    case 3:
-        out_sortName = "Bubble sort";
-        return bubble_sort;
-    case 4:
-        out_sortName = "Merge sort";
-        return merge_sort;
-    case 5:
-        out_sortName = "Quick sort";
-        return quick_sort;
-    default:
-        return nullptr;
-    }
-}
 
 int* selection_sort(int* array, int arraySize) {
     // if array size is larger than one, then start checking
@@ -216,7 +164,6 @@ long long* get_sort_time_taken_array(sort_func sort, int arraySize, int iteratio
         resultArray[i] = timeTakenNanoseconds;
         
         delete [] array;
-        // std::cout << "end of iteration " << i << std::endl;
     }
 
     
@@ -247,4 +194,57 @@ long long quick_sort(long long* array, int arraySize)
     quick_sort(array+pivotIndex+1, lastIndex-pivotIndex);
     
     return array[0];
+}
+
+bool is_sorted(int* array, int arraySize)
+{
+    for (int i = 0; i < arraySize - 1; i++)
+    {
+        if (array[i] > array[i + 1])
+            return false;
+    }
+    return true;
+}
+
+sort_func prompt_sort_func(std::string& out_sortName)
+{
+    int choice;
+    do
+    {
+        choice = IO::get_int_input("Select sorting algorithm:\n"
+                                       "1. Selection sort\n"
+                                       "2. Insertion sort\n"
+                                       "3. Bubble sort\n"
+                                       "4. Merge sort\n"
+                                       "5. Quick sort\n");
+
+        if (choice < 1 || choice > 5)
+            IO::print_message("Invalid choice. Please try again.");
+    } while (choice < 1 || choice > 5);
+    
+    return get_sort_func(choice, out_sortName);
+}
+
+sort_func get_sort_func(int choice, std::string& out_sortName)
+{
+    switch (choice)
+    {
+    case 1:
+        out_sortName = "Selection sort";
+        return selection_sort;
+    case 2:
+        out_sortName = "Insertion sort";
+        return insertion_sort;
+    case 3:
+        out_sortName = "Bubble sort";
+        return bubble_sort;
+    case 4:
+        out_sortName = "Merge sort";
+        return merge_sort;
+    case 5:
+        out_sortName = "Quick sort";
+        return quick_sort;
+    default:
+        return nullptr;
+    }
 }

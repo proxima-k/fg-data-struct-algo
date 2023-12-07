@@ -23,14 +23,12 @@ void Graph::add_node(Node* node)
     nodes_.push_back(node);
 }
 
-void Graph::print_graph() const
+void Graph::print_node_neighbors() const
 {
     Node* previousNode = nodes_.front();
     
     for (Node* node : nodes_)
     {
-        // node->print_neighbors();
-        // node.print_neighbours();
         if (node->get_position().y == previousNode->get_position().y)
         {
             int distance = node->get_position().x - previousNode->get_position().x;
@@ -73,7 +71,6 @@ bool Graph::breadth_first_search(Node* start, Node* end) const
     {
         Node* current = toVisit.front();
 
-        // std::cout << "Visiting node " << current->get_id() << std::endl;
         toVisit.pop();
         
         if (current->get_id() == end->get_id())
@@ -83,9 +80,6 @@ bool Graph::breadth_first_search(Node* start, Node* end) const
 
         for (Node* neighbor : current->get_neighbors())
         {
-            // std::cout << "Checking neighbor " << neighbor->get_id() << std::endl;
-
-            // std::cout << visited[neighbor->get_id()] << std::endl;
             if (!visited[neighbor->get_id()])
             {
                 toVisit.push(neighbor);
@@ -116,7 +110,6 @@ bool Graph::depth_first_search(Node* start, Node* end) const
     {
         Node* current = toVisit.top();
 
-        // std::cout << "Visiting node " << current->get_id() << std::endl;
         toVisit.pop();
         
         if (current->get_id() == end->get_id())
@@ -126,9 +119,6 @@ bool Graph::depth_first_search(Node* start, Node* end) const
 
         for (Node* neighbor : current->get_neighbors())
         {
-            // std::cout << "Checking neighbor " << neighbor->get_id() << std::endl;
-
-            // std::cout << visited[neighbor->get_id()] << std::endl;
             if (!visited[neighbor->get_id()])
             {
                 toVisit.push(neighbor);

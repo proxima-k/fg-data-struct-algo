@@ -1,5 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
+#include <string>
 
 namespace Utils
 {
@@ -11,6 +12,9 @@ namespace Utils
         void print_array(const int* array, int arraySize, bool printNewLine = true);
 
         int get_int_input(const char* prompt = ">>> ");
+        
+        void print_title(std::string title);
+
     }
 
     namespace DataStructures
